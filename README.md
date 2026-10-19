@@ -11,12 +11,43 @@ English is served from `/`, Indonesian from `/id/`.
 ## Commands
 
 ```sh
-deno task serve   # local dev server with live reload
+deno task serve   # local dev server with live reload + CMS at /admin
 deno task build   # production build into _site/
 deno task prod    # build with the production location
 LUME_DRAFTS=true deno task build   # include draft posts
 deno task new     # create a new post
 ```
+
+## Editing content with Lume CMS
+
+The CMS is configured in `_cms.ts` and is only loaded by the dev server, never
+by `deno task build`.
+
+```sh
+deno task serve
+# open http://localhost:3000/admin
+```
+
+From the admin you can:
+
+- edit the home page text, menu links, meta tags, analytics and Giscus settings
+  (`_data.yml`);
+- create, edit and delete blog posts in `posts/`;
+- edit extra pages in `pages/` and the About page;
+- upload images to `images/`.
+
+Changes are written straight to the Markdown/YAML files, and the preview
+iframe reloads the local site. Commit the changes with Git as usual.
+
+Notes:
+
+- The dev server enables drafts (`LUME_DRAFTS=true`), so draft posts are
+  editable and previewable. A normal build excludes them.
+- The CMS writes `date` values with the `+07:00` offset used by this blog.
+- `id` links translations: two posts with the same `id` (one `en`, one `id`)
+  are treated as translations of each other.
+- The `src` storage is the repository root, so paths in `_cms.ts` are relative
+  to it (`src:posts/*.md`, `src:_data.yml`, ...).
 
 The site location (`https://fahri.blog`) is set in `_config.ts`, so
 `deno task build` already produces absolute URLs.
