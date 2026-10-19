@@ -1,0 +1,61 @@
+lang: en
+
+home:
+  welcome: "Fahri NH"
+  intro: "A blog by Fahri Nurul Hidayat. [English](/) · [Bahasa Indonesia](/id/)"
+  posts: 12
+
+archives:
+  posts: 24
+  tag: 12
+  author: 12
+  basename: archive
+
+copyright: "&copy; 2017–2026 Fahri Nurul Hidayat"
+
+menu_links:
+  - title: GitHub
+    url: https://github.com/fahrinh
+    target: _blank
+
+logo:
+  svg: ""
+  height: 48
+
+metas:
+  site: Fahri NH
+  description: A blog by Fahri Nurul Hidayat
+  title: "=title"
+  image: "=image"
+  lang: en
+  generator: false
+
+analytics:
+  id: G-MQ5LN0JS5P
+
+comments:
+  giscus:
+    enable: true
+    repo: fahrinh/fahrinh.github.io
+    repoId: MDEwOlJlcG9zaXRvcnk5ODAzNzU4MA==
+    category: Announcements
+    categoryId: DIC_kwDOBdfvTM4CTQ_z
+
+# Languages supported by the multilanguage plugin.
+languages:
+  - en
+  - id
+defaultLanguage: en
+
+# Indonesian overrides. Note: the `id` language code collides with the page
+# `id` variable, so translations must live under `translations.id` (never a
+# top-level `id:` block). See _plugins/multilanguage.ts.
+translations:
+  id:
+    home:
+      welcome: "Fahri NH"
+      intro: "Blog oleh Fahri Nurul Hidayat. [English](/) · [Bahasa Indonesia](/id/)"
+    metas:
+      description: Blog oleh Fahri Nurul Hidayat
+      lang: id
+    copyright: "&copy; 2017–2026 Fahri Nurul Hidayat"

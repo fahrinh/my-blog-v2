@@ -1,0 +1,67 @@
+---
+layout: layouts/base.vto
+bodyClass: body-home
+title: Home
+id: home
+lang: [en, id]
+unmatchedLangUrl: "/"
+oldUrl: ["/posts/"]
+translationsId:
+  title: Beranda
+  oldUrl: ["/id/posts/"]
+---
+
+{{ set archive = search.page(`type=archive lang=${lang} pagination.page=1`) }}
+
+<header class="page-header center">
+  <h1 class="page-title">{{ home.welcome }}</h1>
+  <div class="page-subtitle">{{ home.intro |> md }}</div>
+</header>
+
+<main class="{{ it.bodyClass }}">
+  <section class="postList">
+    <br>
+    {{ for post of search.pages(`type=post lang=${lang}`, "date=desc", home.posts) }}
+      <article class="post">
+        <header class="post-header">
+          <h2 class="post-title">
+            <a
+              href="{{ post.url }}"
+              {{ if post.url == url }}
+                aria-current="page"{{ /if }}
+            >{{ post.title }}</a>
+          </h2>
+
+          {{
+            include "templates/post-details.vto" {
+              date: post.date,
+              tags: post.tags,
+              author: post.author,
+              readingInfo: post.readingInfo,
+            }
+          }}
+        </header>
+
+        <div class="post-excerpt body">
+          {{ post.excerpt |> md }}
+        </div>
+
+        <p>
+          <a href="{{ post.url }}" class="post-link">
+            {{ i18n.nav.continue_reading }}
+          </a>
+        </p>
+      </article>
+    {{ /for }}
+  </section>
+
+  <hr>
+
+  {{ if archive }}
+    <p>
+      {{ i18n.nav.archive_search }}
+      <a href="{{ archive.url }}">{{ i18n.nav.archive_title }}</a>
+    </p>
+  {{ /if }}
+  <div class="search" id="search"></div>
+</main>

@@ -1,0 +1,23 @@
+{{ if comments?.giscus?.enable }}
+  <section class="comments" data-pagefind-ignore>
+  <h2>{{ i18n.comments?.title ?? "Comments" }}</h2>
+  <script
+    src="https://giscus.app/client.js"
+    data-repo="{{ comments.giscus.repo }}"
+    data-repo-id="{{ comments.giscus.repoId }}"
+    data-category="{{ comments.giscus.category }}"
+    data-category-id="{{ comments.giscus.categoryId }}"
+    data-mapping="specific"
+    data-term="{{ giscusTerm || url }}"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="{{ lang }}"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+  ></script>
+</section>
+{{ /if }}

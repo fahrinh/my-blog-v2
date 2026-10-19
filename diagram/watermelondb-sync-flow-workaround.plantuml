@@ -1,0 +1,80 @@
+@startuml
+title WatermelonDB Sync Flow + Workaround
+
+actor User
+
+participant "ReactApp+WatermelonDB" as ReactApp
+participant BackendApp
+database ServerDB
+
+User -> ReactApp : click Sync\n(or auto sync)
+activate ReactApp
+
+autonumber
+
+ReactApp -> ReactApp : init ""latestVersionOfSession""\n& ""changesOfSession""
+
+ReactApp -> ReactApp : call 1st ""synchronize()""
+activate ReactApp #Yellow
+
+ReactApp -> ReactApp : ""pullChanges(lastPulledAt)""
+activate ReactApp #OrangeRed
+
+ReactApp -> BackendApp : ""GET pull(lastPulledAt)""
+activate BackendApp
+
+BackendApp -> ServerDB : get ""changes"" \n& ""latestVersion""
+ServerDB -> BackendApp : ""changes"" \n& ""latestVersion""
+
+BackendApp -> ReactApp : ""changes"" \n& ""latestVersion""
+deactivate BackendApp
+
+ReactApp -> ReactApp : set\n""latestVersionOfSession = latestVersion""\n""changesOfSession = changes""
+ReactApp -> ReactApp : apply ""changes"" on localDB
+ReactApp -> ReactApp : for next pull, set\n""lastPulledAt"" = ""latestVersion""
+
+deactivate ReactApp
+
+ReactApp -> ReactApp : ""pushChanges(changes,""\n""lastPulledAt)""
+activate ReactApp #DeepSkyBlue
+
+ReactApp -> BackendApp : ""POST push(lastPulledAt,""\n""changes)""
+activate BackendApp
+
+BackendApp -> ServerDB : check conflict\nusing ""lastPulledAt""
+ServerDB -> BackendApp
+
+BackendApp -> ServerDB : if no conflict,\nrecord ""changes""\nwith ""push_id""
+ServerDB -> BackendApp
+
+BackendApp -> BackendApp : get ""latestVersion""\n& ""changes""\n(filtered out by\n""push_id"")
+
+BackendApp -> ReactApp : ""latestVersion"" & ""changes""
+ReactApp -> ReactApp : set\n""latestVersionOfSession = latestVersion""\n""changesOfSession = changes""
+
+deactivate BackendApp
+
+deactivate ReactApp
+deactivate ReactApp
+
+ReactApp -> ReactApp : call 2nd ""synchronize()""
+activate ReactApp #Yellow
+
+ReactApp -> ReactApp : ""pullChanges(lastPulledAt)""
+activate ReactApp #OrangeRed
+
+ReactApp -> ReactApp : apply on LocalDB\n""lastPulledAt"" = ""latestVersionOfSession""\n""changes"" = ""changesOfSession""
+deactivate ReactApp
+
+ReactApp -> ReactApp : ""pushChanges(changes,""\n""lastPulledAt)""
+activate ReactApp #DeepSkyBlue
+
+ReactApp -> ReactApp : do nothing
+deactivate ReactApp
+
+autonumber stop
+
+ReactApp -> User
+deactivate ReactApp
+
+@enduml

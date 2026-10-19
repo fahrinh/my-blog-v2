@@ -1,0 +1,101 @@
+{
+  "imports": {
+    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.2/",
+    "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.15/jsx-runtime.ts",
+    "lume/markdown-plugins/": "https://cdn.jsdelivr.net/gh/lumeland/markdown-plugins@0.12.0/",
+    "mdit/plugin-alert": "https://cdn.jsdelivr.net/npm/@mdit/plugin-alert@2.0.0/dist/index.js",
+    "xeo/": "https://cdn.jsdelivr.net/gh/famebot/xeo@9.0.3/"
+  },
+  "tasks": {
+    "lume": {
+      "description": "Run Lume command",
+      "command": "deno run -P=lume lume/cli.ts"
+    },
+    "build": {
+      "description": "Build the site for production",
+      "command": "deno task lume"
+    },
+    "serve": {
+      "description": "Run and serve the site for development",
+      "command": "deno task lume -s"
+    },
+    "d": "deno task serve",
+    "s": "deno task serve",
+    "prod": "deno task lume --location=https://fahri.blog",
+    "new": "deno task lume new"
+  },
+  "compilerOptions": {
+    "types": [
+      "lume/types.ts"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "lume"
+  },
+  "lint": {
+    "exclude": [
+      "./_site",
+      "./_cache",
+      "./.agents"
+    ],
+    "rules": {
+      "tags": [
+        "recommended"
+      ],
+      "exclude": [
+        "no-import-prefix"
+      ]
+    },
+    "plugins": [
+      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.2/lint.ts"
+    ]
+  },
+  "fmt": {
+    "exclude": [
+      "./_site",
+      "./_cache",
+      "./.agents",
+      "./.migration",
+      "./posts",
+      "./pages",
+      "./images",
+      "./diagram",
+      "./TASK.md",
+      "./PLAN_*.md",
+      "./README.md"
+    ]
+  },
+  "unstable": [
+    "temporal",
+    "fmt-component"
+  ],
+  "permissions": {
+    "lume": {
+      "read": true,
+      "write": [
+        "./"
+      ],
+      "import": [
+        "cdn.jsdelivr.net:443",
+        "jsr.io:443",
+        "deno.land:443",
+        "registry.npmjs.org:443"
+      ],
+      "net": [
+        "0.0.0.0",
+        "127.0.0.1:9229",
+        "cdn.jsdelivr.net:443",
+        "data.jsdelivr.com:443",
+        "fonts.googleapis.com:443",
+        "fonts.gstatic.com:443",
+        "jsr.io:443",
+        "deno.land:443",
+        "registry.npmjs.org:443"
+      ],
+      "env": true,
+      "run": true,
+      "ffi": true,
+      "sys": true
+    }
+  },
+  "lock": false
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+{{ set feedBase = lang === defaultLanguage ? "" : "/" + lang }}
+<html lang="{{ it.lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if it.id === "home" }}{{ metas.site }}{{ else }}{{ it.title || metas.title }} - {{ metas.site }}{{ /if }}</title>
+    <link rel="stylesheet" href="/color-options.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/lang.css">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link
+      rel="alternate"
+      href="{{ feedBase }}/feed.xml"
+      type="application/rss+xml"
+      title="{{ metas.site }}"
+    >
+    <link
+      rel="alternate"
+      href="{{ feedBase }}/feed.json"
+      type="application/json"
+      title="{{ metas.site }}"
+    >
+    <link rel="canonical" href="{{ url |> url(true) }}">
+
+    <meta name="supported-color-schemes" content="light dark">
+    <meta
+      name="theme-color"
+      content="hsl(var(--a), 20%, 100%)"
+      media="(prefers-color-scheme: light)"
+    >
+    <meta
+      name="theme-color"
+      content="hsl(var(--a), 65%, 0%)"
+      media="(prefers-color-scheme: dark)"
+    >
+    {{ if analytics?.id }}
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id={{ analytics.id }}"
+      ></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "{{ analytics.id }}");
+      </script>
+    {{ /if }}
+    {{ it.extra_head?.join("\n") }}
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="{{ lang === defaultLanguage ? "/" : "/" + lang + "/" }}" class="navbar-home" aria-label="Homepage">
+        {{ if it.logo.svg }}
+          <img
+            src="{{ it.logo.svg }}"
+            height="{{ it.logo.height }}"
+            alt="{{ metas.site }}"
+            title="{{ metas.site }}"
+          />
+        {{ else }}
+          <strong>{{ metas.site }}</strong>
+        {{ /if }}
+      </a>
+
+      <ul class="navbar-links">
+        {{- for entry of search.pages(`menu.visible=true lang=${lang}`, "menu.order") }}
+          <li>
+            <a
+              href="{{ entry.url }}"
+              {{ if entry.url == url }}
+                aria-current="page"{{ /if }}
+            >
+              {{ entry.menu.title || entry.title }}
+            </a>
+          </li>
+        {{ /for }}
+        {{- for link of it.menu_links }}
+          <li>
+            <a
+              href="{{ link.url }}"
+              {{ if link.target }}
+                target="{{ link.target }}"{{ /if }}
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {{ /for }}
+        <li class="lang-switcher">
+          {{ for link of languageLinks }}
+            <a
+              href="{{ link.url }}"
+              hreflang="{{ link.lang }}"
+              lang="{{ link.lang }}"
+              title="{{ link.label }}"
+              {{ if link.current }}aria-current="true"{{ /if }}
+            >{{ link.short }}</a>
+          {{ /for }}
+        </li>
+        <li>
+          {{# respond to prefers-color-scheme changes #}}
+          <script>
+            let theme = localStorage.getItem("theme") ||
+              (window.matchMedia("(prefers-color-scheme: dark)")
+                  .matches
+                ? "dark"
+                : "light");
+            document.documentElement.dataset.theme = theme;
+            function changeTheme() {
+              theme = theme === "dark" ? "light" : "dark";
+              localStorage.setItem("theme", theme);
+              document.documentElement.dataset.theme = theme;
+            }
+            function darkChange() {
+              if (theme === "light") {
+                changeTheme();
+              }
+            }
+            function lightChange() {
+              if (theme === "dark") {
+                changeTheme();
+              }
+            }
+            const darkPreference = window.matchMedia(
+              "(prefers-color-scheme: dark)",
+            );
+            const lightPreference = window.matchMedia(
+              "(prefers-color-scheme: light)",
+            );
+            darkPreference.addEventListener(
+              "change",
+              (e) => e.matches && darkChange(),
+            );
+            lightPreference.addEventListener(
+              "change",
+              (e) => e.matches && lightChange(),
+            );
+          </script>
+          <button class="button" onclick="changeTheme()">
+            <span class="icon">◐</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    {{ content }}
+
+    <footer class="center">
+      <p class="feed-bar">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="3" cy="13" r="2" fill="currentColor" />
+          <path
+            d="M14 13C14 6.925 9.075 2 3 2M9 13a6 6 0 0 0-6-6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg> Feed:
+        <a href="{{ feedBase }}/feed.xml">RSS</a>,
+        <a href="{{ feedBase }}/feed.json">JSON</a>
+      </p>
+      {{ copyright |> md }}
+    </footer>
+    <!-- Current page: {{ url }} -->
+  </body>
+</html>

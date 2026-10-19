@@ -1,0 +1,46 @@
+nav:
+  toc: Table of Contents
+  next_post: Newer post →
+  previous_post: ← Older post
+  continue_reading: Continue reading →
+  archive_title: Archive
+  archive_search: Search
+  back: ← Back
+  page: Page
+  next: Next →
+  previous: ← Previous
+post:
+  by: by
+  reading_time: min read
+search:
+  by_author: Posts by
+  by_tag: Tagged
+  tags: Tags
+  authors: Authors
+comments:
+  title: Comments
+
+# Indonesian translations. Merged into the root `i18n` object per page by the
+# preprocessor in _config.ts.
+id:
+  nav:
+    toc: Daftar Isi
+    next_post: Posting lebih baru →
+    previous_post: ← Posting lebih lama
+    continue_reading: Baca selengkapnya →
+    archive_title: Arsip
+    archive_search: Cari
+    back: ← Kembali
+    page: Halaman
+    next: Berikutnya →
+    previous: ← Sebelumnya
+  post:
+    by: oleh
+    reading_time: menit baca
+  search:
+    by_author: Posting oleh
+    by_tag: Dengan tag
+    tags: Tag
+    authors: Penulis
+  comments:
+    title: Komentar
